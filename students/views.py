@@ -8,6 +8,87 @@ from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
 from courses.models import Course
 from django.views.generic.detail import DetailView
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, Perfil, UserForm
+from django.template import RequestContext
+from django.shortcuts import render, render_to_response
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+def add_user(request):
+    if request.method == "POST":
+        perfil_form=UserForm(request.POST)
+        if perfil_form.is_valid():
+            try:
+                new_user = perfil_form.save(commit=False)
+                new_user.set_password(
+                    perfil_form.cleaned_data['password'])
+                new_user.save()
+
+                return render(request,
+                              'students/student/registration.html',
+                              {'mensaje': 'Se agrego correctamente', 'new_user': new_user, })
+            except:
+                return render(request,
+                              'students/student/registration.html',
+                              locals(),)
+
+    else:
+        perfil_form = UserForm
+    return render(request,
+                  'students/student/registration.html',
+                  locals(), )
+
+
+
+def register(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(
+                user_form.cleaned_data['password'])
+            new_user.save()
+
+            # Create the user profile
+            profile = Perfil.objects.create(user=new_user)
+            profile.date_of_birth = request.POST['date_of_birth']
+            profile.save()
+
+            # profile_form = ProfileEditForm(instance=request.user.profile)
+
+            return render(request,
+                          'students/student/edit.html',
+                          {'new_user': new_user})
+    else:
+        user_form = UserRegistrationForm()
+        profile_form = UserForm()
+    return render(request,
+                  'students/student/registration.html',
+                  {'user_form': user_form, "profile_form": profile_form})
+
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user,
+                                 data=request.POST)
+        profile_form = UserForm(instance=request.user.profile,
+                                       data=request.POST,
+                                       files=request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Profile updated successfully')
+        else:
+            messages.error(request, 'Error updating your profile')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = UserForm(instance=request.user.profile)
+    return render(request,
+                  'students/student/edit.html',
+                  {'user_form': user_form,
+                   'profile_form': profile_form})
 
 
 class StudentRegistrationView(CreateView):

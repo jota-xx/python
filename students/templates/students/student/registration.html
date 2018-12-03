@@ -4,12 +4,20 @@
 {% endblock %}
 {% block content %}
     <h1> Sign up </h1>
-    <div class="module">
-        <p>Enter your details to create an account:</p>
-        <form action="" method="post">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Create my account"></p>
-        </form>
-    </div>
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+        <p>Debe logearse para poder ingresar a los cursos <a href="{% url 'login' %}">CLICK AQUÍ</a></p>
+    {% else %}
+        <div class="module">
+            <p>Enter your details to create an account:</p>
+            <form action="" method="post">
+                {{ perfil_form.as_p }}
+                {% csrf_token %}
+                <p><input type="submit" value="Create my account"></p>
+            </form>
+
+
+        </div>
+
+    {% endif %}
 {% endblock %}
