@@ -14,7 +14,7 @@
             {% if request.user.is_authenticated %}
                 <li>
                     {{ request.user.last_name }}, {{ request.user.first_name }}
-                    {% if request.user|has_group:"Instructors" %}
+                    {% if request.user|has_group:"Profesores" %}
                         [Profesor]
                     {% else %}
                         [Alumno]
