@@ -4,9 +4,9 @@
     <h1>Log-in</h1>
     <div class="module">
         {% if form.errors %}
-            <p>Your username and password didn't match. Please try again.</p>
+            <p>El usuario/password es incorrecto.</p>
         {% else %}
-            <p>Please, use the following form to log-in:</p>
+            <p>Ingrese su nombre de usuario y contraseña:</p>
         {% endif %}
         <div class="login-form">
             <form action="{% url 'login' %}" method="post">
@@ -15,6 +15,8 @@
                 <input type="hidden" name="next" value="{{ next }}" />
                 <p><input type="submit" value="Log-in"></p>
             </form>
+            <br>
+            En caso de no estar registrado, registrese <a href="{% url 'registro' %}">aquí</a>
         </div>
     </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+{% load course %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,14 @@
         <a href="/" class="logo">Educa</a>
         <ul class="menu">
             {% if request.user.is_authenticated %}
+                <li>
+                    {{ request.user.last_name }}, {{ request.user.first_name }}
+                    {% if request.user|has_group:"Instructors" %}
+                        [Profesor]
+                    {% else %}
+                        [Alumno]
+                    {% endif %}
+                </li>
                 <li><a href="{% url "logout" %}">Sign out</a></li>
             {% else %}
                 <li><a href="{% url "login" %}">Sign in</a></li>

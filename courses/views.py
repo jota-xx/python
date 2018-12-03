@@ -14,6 +14,7 @@ from django.db.models import Count
 from .models import Subject
 from django.views.generic.detail import DetailView
 from students.forms import CourseEnrollForm
+from django.contrib.auth.decorators import login_required
 
 
 class OwnerMixin(object):
