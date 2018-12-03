@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {% load course %}
 {% load staticfiles %}
 {% block title %}
@@ -31,7 +32,7 @@
             {% endfor %}
 
             {% if request.user|has_group:"Profesores" %}
-                <li>aaa</li>
+                <li><a href="{% url "manage_course_list" %}">Editar mis cursos</a> </li>
             {% endif %}
         </ul>
     </div>
